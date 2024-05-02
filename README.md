@@ -14,12 +14,6 @@ In this assignment, you will use Express as a Middleman for API requests. Refer 
 
 Do them first!!
 
-## Starter Code
-
-Open your Giphy Search React assignment (`7-0-2`). It should, at minimum, be able to fetch and render the top three trending gifs.
-
-Fork this repository
-
 ## Grading
 
 Your grade on this assignment will be determined by the number of tasks you are able to complete. Tasks appear as a checkbox, like this:
@@ -38,12 +32,14 @@ You got this!
 
 ## Part 1 — Setup
 
-Open your Giphy Search React assignment (`7-0-2`). It should, at minimum, be able to fetch and render the top three trending gifs.
+Open your Giphy Search React assignment (`7-0-2-assignment-your-username`). It should, at minimum, be able to fetch and render the top three trending gifs.
+* Copy the `giphy-search` folder and move the copy into this assignment (`8-0-2-assignment-your-username`)
 
-* `cd` into the `giphy-search` folder and run `npm run build` to create the static assets `dist/` folder.
-* In the root directory, create a `server` folder and `cd` into it
-* Create an `index.js` file.
-* Create a `.env` file and store your Giphy API key inside
+The remaining steps will all be conducted inside this assignment (`8-0-2-assignment-your-username`)
+* `cd` into the `giphy-search` folder (the copy that you made inside this assignment) and run `npm i && npm run build` to install dependencies and to create the static assets `dist/` folder.
+* Back in the root directory of this assignment, create a `server` folder. You should now have a `giphy-search` folder and a `server` folder in the root of your project.
+* Inside the `server` folder, create an `index.js` file.
+* Also in the `server` folder, create a `.env` file and store your Giphy API key inside
 
     ```
     API_KEY="paste-api-key-here"
@@ -56,7 +52,7 @@ Open your Giphy Search React assignment (`7-0-2`). It should, at minimum, be abl
     .env
     ```
 
-* Run `npm init -y` to create a `package.json` file.
+* `cd server` and run `npm init -y` to create a `package.json` file.
   * Run `npm i express dotenv`
   * Run `npm i -D nodemon` to install Nodemon as a dev dependency
   * Modify the `package.json` file with the following `"scripts"`:
