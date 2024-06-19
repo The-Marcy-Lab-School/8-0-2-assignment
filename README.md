@@ -25,7 +25,7 @@ Your grade on this assignment will be determined by the number of tasks you are 
 
 Feel free to mark these tasks as complete/incomplete, however your instructor will likely modify your tasks when grading.
 
-This assignment has 12 tasks:
+This assignment has 12 tasks and 1 bonus task:
 - 4 setup tasks
 - 7 server application tasks
 - 1 deployment task
@@ -44,10 +44,11 @@ Before continuing, make sure that these tasks are completed!
 - [ ] In `index.js`, the `express()` function is used to create an `app`
 - [ ] The `express.static()` middleware is used to server the static assets in the React application's `dist/` folder.
 - [ ] The `app` listens on an available port (I recommend `8080`)
-- [ ] A `/api/gifs` endpoint is available. 
-- [ ] The server can send a fetch request to the Giphy API using the API Key from `process.env`
+- [ ] A `/api/gifs` endpoint exists. 
+- [ ] The `/api/gifs` endpoint sends a fetch request to the Giphy API using the API Key from `process.env` and sends a response (or an error) back to the client
 - [ ] The frontend `vite.config.js` file has been updated to enable proxy requests
-- [ ] The `/api/gifs` endpoint can parse the `req.query` parameters to get the search term and make a request to the Giphy API's search endpoint.
+- [ ] The frontend sends a request to `/api/gifs` instead of directly to the Giphy API
+- [ ] Bonus: The `/api/gifs` endpoint can parse the `req.query` parameters to get the search term and make a request to the Giphy API's search endpoint.
 
 **Deployment Technical Requirements**
 
@@ -113,9 +114,42 @@ In `server/index.js`, create a simple Express server application. It should:
 * Serve static assets from the `giphy-search/dist` folder
 * Have an `/api/gifs` endpoint that can fetch from the Giphy API using your API key
 
-Update the frontend React application such that it sends requests to the server using the same origin instead of directly to the Giphy API
-* Update the `vite.config.js` file to enable proxy requests.
+Update the `giphy-search` React application:
+* It should send requests to the `/api/gifs` endpoint of the server instead of the Giphy API.
+* Run `npm run build` to update the `dist/` folder
+* Update the `vite.config.js` file to enable proxy requests during development.
 
+```js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+const PORT = 8080;
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: `http://localhost:${PORT}`,
+        changeOrigin: true,
+      },
+    },
+  },
+});
+```
+
+Finally, confirm that you have successfully adjusted your frontend to use the server as a middleman for API requests by:
+* `cd` back into your `server` folder
+* Run the server with `npm run dev`
+* Open the application
+* Open the Developer Tools Network Tab and refresh the page
+* You should see a request sent to `gifs` and there should NOT be a request sent to the Giphy API (see below)
+  * If this is not the case, double check that you have re-built your frontend and updated the `dist/` folder.
+
+![](./img/localhost-fetch.png)
+
+**Bonus Challenge!**
 Add a search endpoint to your server, letting the frontend send search GET requests to the backend using query parameters.
 * When the user submits the search form with the term `"fox"`, the frontend should send a request to `/api/gifs?search=fox`.
 * When the server receives this request, it should look at the `req.query` object to find the `search` value and then make a request to the Giphy API's search endpoint.
