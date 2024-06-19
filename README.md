@@ -59,7 +59,7 @@ You got this!
 
 We've given you a partially complete "Giphy Search" React project that uses the GIPHY API to fetch the top 25 trending gifs of the day. 
 
-To get it to work, you'll need to log into your [GIPHY Developer Dashboard](https://developers.giphy.com/dashboard/) and copy your API Key into the `giphy-search/src/config.js` file.
+To get it to work, you'll need to log into your [GIPHY Developer Dashboard](https://developers.giphy.com/dashboard/) and copy your API Key into the `giphy-search/src/config.js` file (you'll need to make this file too).
 
 Then, `cd` into the `giphy-search` folder, and run `npm i && npm run dev` to install dependencies and start the server. Confirm that the gifs are being fetched!
 
