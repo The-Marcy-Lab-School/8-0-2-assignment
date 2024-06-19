@@ -1,12 +1,14 @@
 # 8-0-2-assignment
 
+DEPLOYED LINK: [add your link here](addyourlinkhere)
+
 In this assignment, you will use Express as a Middleman for API requests. Refer to the [lecture notes](https://github.com/The-Marcy-Lab-School/8-0-2-express-api-middleman) for support.
 
 **Table of Contents**
 - [Short Responses](#short-responses)
-- [Starter Code](#starter-code)
 - [Grading](#grading)
-- [Part 1 — Setup](#part-1--setup)
+- [Part 0 — Add your GIPHY API KEY](#part-0--add-your-giphy-api-key)
+- [Part 1 — Create your Server](#part-1--create-your-server)
 - [Part 2 — API Middleman](#part-2--api-middleman)
 - [Part 3 — Deploy](#part-3--deploy)
 
@@ -23,20 +25,56 @@ Your grade on this assignment will be determined by the number of tasks you are 
 
 Feel free to mark these tasks as complete/incomplete, however your instructor will likely modify your tasks when grading.
 
-This assignment has 13 tasks:
-- 5 setup tasks
+This assignment has 12 tasks:
+- 4 setup tasks
 - 7 server application tasks
 - 1 deployment task
 
+**Setup Technical Requirements**
+
+Before continuing, make sure that these tasks are completed!
+
+- [ ] Has a `server` folder with an `index.js` file and a `package.json` file inside
+- [ ] `package.json` has `express` and `dotenv` installed as a dependency and `nodemon` as a dev dependency
+- [ ] `package.json` has a `"dev"` script that uses `nodemon` and a `"start"` script that uses `node`
+- [ ] Environment variables are stored in the `.env` folder and `.env` is added to the `.gitignore` file
+
+**Server/Frontend Application Technical Requirements**
+
+- [ ] In `index.js`, the `express()` function is used to create an `app`
+- [ ] The `express.static()` middleware is used to server the static assets in the React application's `dist/` folder.
+- [ ] The `app` listens on an available port (I recommend `8080`)
+- [ ] A `/api/gifs` endpoint is available. 
+- [ ] The server can send a fetch request to the Giphy API using the API Key from `process.env`
+- [ ] The frontend `vite.config.js` file has been updated to enable proxy requests
+- [ ] The `/api/gifs` endpoint can parse the `req.query` parameters to get the search term and make a request to the Giphy API's search endpoint.
+
+**Deployment Technical Requirements**
+
+- [ ] Your server is deployed and the link is added to this repo's README
+
 You got this!
 
-## Part 1 — Setup
+## Part 0 — Add your GIPHY API KEY
 
-Open your Giphy Search React assignment (`7-0-2-assignment-your-username`). It should, at minimum, be able to fetch and render the top three trending gifs.
-* Copy the `giphy-search` folder and move the copy into this assignment (`8-0-2-assignment-your-username`)
+We've given you a partially complete "Giphy Search" React project that uses the GIPHY API to fetch the top 25 trending gifs of the day. 
 
-The remaining steps will all be conducted inside this assignment (`8-0-2-assignment-your-username`)
-* `cd` into the `giphy-search` folder (the copy that you made inside this assignment) and run `npm i && npm run build` to install dependencies and to create the static assets `dist/` folder.
+To get it to work, you'll need to log into your [GIPHY Developer Dashboard](https://developers.giphy.com/dashboard/) and copy your API Key into the `giphy-search/src/config.js` file.
+
+Then, `cd` into the `giphy-search` folder, and run `npm i && npm run dev` to install dependencies and start the server. Confirm that the gifs are being fetched!
+
+Finally, run `npm run build` to generate the `dist/` folder where your static assets will be served from.
+
+## Part 1 — Create your Server
+
+Now that we have a working "Giphy Search" React project, we need to fix an issue. We have "hidden" the API key in the `config.js` folder so that is not published on GitHub, but this presents two problems:
+- We won't be able to deploy this project without the API key.
+- If the API key is used by the client, then even if we were able to deploy the project with an API key, the user would be able to see (and steal) the API key by looking at the Developer Console Network tab and looking at the outgoing request.
+
+In this project, we'll create a server to perform this fetch on behalf of the client. The client will send a request to the server for the gif data, the server will fetch that data using the API key and send the data to the client, and the client won't need to know the API key at all.
+
+To get started, set up the `server` directory:
+
 * Back in the root directory of this assignment, create a `server` folder. You should now have a `giphy-search` folder and a `server` folder in the root of your project.
 * Inside the `server` folder, create an `index.js` file.
 * Also in the `server` folder, create a `.env` file and store your Giphy API key inside
@@ -53,7 +91,7 @@ The remaining steps will all be conducted inside this assignment (`8-0-2-assignm
     ```
 
 * `cd server` and run `npm init -y` to create a `package.json` file.
-  * Run `npm i express dotenv`
+  * Run `npm i express dotenv` to install Express and the `dotenv` package
   * Run `npm i -D nodemon` to install Nodemon as a dev dependency
   * Modify the `package.json` file with the following `"scripts"`:
 
@@ -67,16 +105,6 @@ The remaining steps will all be conducted inside this assignment (`8-0-2-assignm
 While working on your server, use `npm run dev` to run the server and have it restart whenever you make changes.
 
 When deploying, you will use the `npm start` command to start the server using the normal `node` command.
-
-**Setup Technical Requirements**
-
-Before continuing, make sure that these tasks are completed!
-
-- [ ] Has a `giphy-search` project folder with a built `dist/` folder
-- [ ] Has a `server` folder with an `index.js` file and a `package.json` file inside
-- [ ] `package.json` has `express` and `dotenv` installed as a dependency and `nodemon` as a dev dependency
-- [ ] `package.json` has a `"dev"` script that uses `nodemon` and a `"start"` script that uses `node`
-- [ ] Environment variables are stored in the `.env` folder and `.env` is added to the `.gitignore` file
 
 ## Part 2 — API Middleman
 
@@ -92,16 +120,6 @@ Add a search endpoint to your server, letting the frontend send search GET reque
 * When the user submits the search form with the term `"fox"`, the frontend should send a request to `/api/gifs?search=fox`.
 * When the server receives this request, it should look at the `req.query` object to find the `search` value and then make a request to the Giphy API's search endpoint.
 
-**Server/Frontend Application Technical Requirements**
-
-- [ ] In `index.js`, the `express()` function is used to create an `app`
-- [ ] The `express.static()` middleware is used to server the static assets in the React application's `dist/` folder.
-- [ ] The `app` listens on an available port (I recommend `8080`)
-- [ ] A `/api/gifs` endpoint is available. 
-- [ ] The server can send a fetch request to the Giphy API using the API Key from `process.env`
-- [ ] The frontend `vite.config.js` file has been updated to enable proxy requests
-- [ ] The `/api/gifs` endpoint can parse the `req.query` parameters to get the search term and make a request to the Giphy API's search endpoint.
-
 ## Part 3 — Deploy
 
 When you're done, push your code to github and [follow these steps to deploy using Render](https://github.com/The-Marcy-Lab-School/render-deployment-instructions). During the setup step, there will be a chance to add your API Key from Giphy as an environment variable.
@@ -110,6 +128,3 @@ Then, add the deployed link to your GitHub About section of the Giphy Search app
 
 ![](./images/deployed-github.png)
 
-**Deployment Technical Requirements**
-
-- [ ] Your GitHub page has a link to the deployed server in the About section. 
